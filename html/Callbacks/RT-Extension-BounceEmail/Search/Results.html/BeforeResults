@@ -1,0 +1,37 @@
+<%ARGS>
+$Format
+$DisplayFormat
+</%ARGS>
+
+<%INIT>
+# push @$Format, 'BlaBla';
+use Data::Dumper; 
+
+print STDERR __FILE__ ."\n";
+print STDERR Dumper $Format;
+# $$DisplayFormat .= 'Bla'; # overrides the whole format string
+print STDERR Dumper $DisplayFormat;
+## push @Format,
+##           {
+##             'output' => [
+##                           '<small>',
+##                           '__Requestors__',
+##                           '</small>'
+##                         ],
+##             'attribute' => 'Requestors',
+##             'last_attribute' => 'Requestors',
+##             'original_string' => '\'<small>__Requestors__</small>\''
+##           };
+## 
+## @Format = ();
+## 
+## $m->callback(
+##      %ARGS,
+##      CallbackName => 'EachRow',
+##      record => 'val',
+##      Format => \@Format,
+## #     Record => $Collection->next,
+##   );
+## 
+</%INIT>
+

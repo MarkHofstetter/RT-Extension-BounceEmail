@@ -1,0 +1,17 @@
+<%ARGS>
+$Classes
+@Format
+$Collection => undef
+</%ARGS>
+
+<%INIT>
+
+## $m->callback(
+##      %ARGS,
+##      CallbackName => 'EachRow',
+##      record => 'val',
+##      Format => \@Format,
+## #     Record => $Collection->next,
+##   );
+
+</%INIT>

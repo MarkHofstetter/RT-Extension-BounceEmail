@@ -1,0 +1,11 @@
+<%ARGS>
+$GenericMap
+$COLUMN_MAP
+</%ARGS>
+
+<%INIT>
+## print STDERR __FILE__ ."\n";
+## print STDERR " $GenericMap  $COLUMN_MAP \n";
+##  $m->callback( GenericMap => $GenericMap, COLUMN_MAP => $COLUMN_MAP, CallbackName => 'Once', CallbackOnce => 1 );
+</%INIT>
+
