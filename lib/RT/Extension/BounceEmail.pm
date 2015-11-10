@@ -75,14 +75,4 @@ This is free software, licensed under:
 
 =cut
 
-use Role::Basic 'with';
-
-use base 'RT::Ticket';
-
-# with "RT::Record::Role";
-
-sub Bounce {
-  my $self = shift;
-}
-
 1;
