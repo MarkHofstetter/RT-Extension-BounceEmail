@@ -1,21 +1,29 @@
 NAME
-    RT-Extension-BounceEmail - [One line description of module's purpose
-    here]
+    RT-Extension-BounceEmail - Add the ability to Bounce Emails  
 
 DESCRIPTION
-    [Why would someone install this extension? What does it do? What problem
-    does it solve?]
+    if one does not want to alter the content of an email with a forward
+    "bounce" is the way to go
 
 RT VERSION
-    Works with RT [What versions of RT is this known to work with?]
-
-    [Make sure to use requires_rt and rt_too_new in Makefile.PL]
+    Works with RT 4.2
 
 INSTALLATION
     perl Makefile.PL
     make
     make install
         May need root permissions
+
+    make initdb
+        Only run this the first time you install this module.
+
+        If you run this twice, you may end up with duplicate data in your
+        database.
+
+        If you are upgrading this module, check for upgrading instructions
+        in case changes need to be made to your database.
+
+        to remoce changes to db execute etc/cleanup.sql in you database
 
     Edit your /opt/rt4/etc/RT_SiteConfig.pm
         If you are using RT 4.2 or greater, add this line:
@@ -34,16 +42,13 @@ INSTALLATION
     Restart your webserver
 
 AUTHOR
-    Best Practical Solutions, LLC <modules@bestpractical.com>
+    Mark Hofstetter, University of Vienna mark.hofstetter@univie.ac.at
 
 BUGS
-    All bugs should be reported via email to
-
-        L<bug-RT-Extension-BounceEmail@rt.cpan.org|mailto:bug-RT-Extension-BounceEmail@rt.cpan.org>
 
     or via the web at
 
-        L<rt.cpan.org|http://rt.cpan.org/Public/Dist/Display.html?Name=RT-Extension-BounceEmail>.
+        L<https://github.com/MarkHofstetter/RT-Extension-BounceEmail/issues>.
 
 LICENSE AND COPYRIGHT
     This software is Copyright (c) 2015 by Mark Hofstetter
