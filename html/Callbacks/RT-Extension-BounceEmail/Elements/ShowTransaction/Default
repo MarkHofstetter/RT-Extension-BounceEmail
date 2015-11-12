@@ -8,7 +8,7 @@ $ShowActions => 1
 $Attachments
 </%ARGS>
 <%INIT>
-if ( $ForwardPath && %$Attachments && $ShowActions ) {
+if ( $Transaction->Type !~ /EmailRecord$/ && $ForwardPath && %$Attachments && $ShowActions ) {
 ## XXX check rights
 ## && $Object->CurrentUserHasRight( $has_right{'Forward'} )) {
  push @$Actions,  {
