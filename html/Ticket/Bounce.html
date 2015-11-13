@@ -94,13 +94,10 @@ $id = $ARGS{'id'} = $TicketObj->id;
 Abort( loc("Permission Denied") )
     unless $TicketObj->CurrentUserHasRight('ForwardMessage');
 
-my $txn;
-if ( $QuoteTransaction ) {
-    $txn = RT::Transaction->new( $session{'CurrentUser'} );
-    $txn->Load( $QuoteTransaction );
-    Abort( loc("Couldn't load transaction #[_1]", $QuoteTransaction) )
-        unless $txn->id;
-}
+my $txn = RT::Transaction->new( $session{'CurrentUser'} );
+$txn->Load( $QuoteTransaction );
+Abort( loc("Couldn't load transaction #[_1]", $QuoteTransaction) )
+    unless $txn->id;
 
 my @results;
 if ( $Bounce || $BounceAndReturn ) {
@@ -116,20 +113,17 @@ my ( $status, $msg ) = Bounce($TicketObj, Transaction => $txn, %ARGS );
     }
 }
 
-my $Title = $txn
-    ? loc('Bounce transaction #[_1]', $txn->id)
-    : loc('Bounce ticket #[_1]', $TicketObj->id);
+my $Title = loc('Bounce transaction #[_1]', $txn->id);
 
-my $from = RT::Interface::Email::GetForwardFrom(
-    $txn ? ( Transaction => $txn ) : ( Ticket => $TicketObj ) );
+my $from = RT::Interface::Email::GetForwardFrom( Transaction => $txn );
 
-my $subject = ($txn || $TicketObj)->Subject;
+my $subject = $txn->Subject;
 
-my $Content = ($txn || $TicketObj)->Content;
+my $Content = $txn->Content;
 
 my $attachments = RT::Interface::Email::GetForwardAttachments(
     Ticket => $TicketObj,
-    $txn ? ( Transaction => $txn ) : (),
+    Transaction => $txn,
 );
 
 # this should possibly somwhere else but wtf
