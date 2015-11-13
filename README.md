@@ -1,6 +1,6 @@
 # NAME
 
-T-Extension-BounceEmail - Add the ability to Bounce Emails
+RT-Extension-BounceEmail - Add the ability to Bounce Emails
 
 # DESCRIPTION
 
@@ -18,6 +18,10 @@ Works with RT 4.2
 - `make install`
 
     May need root permissions
+
+- `make initdb`
+
+    Only for first-time installation
 
 - Edit your `/opt/rt4/etc/RT_SiteConfig.pm`
 
@@ -40,6 +44,7 @@ Works with RT 4.2
 # AUTHOR
 
 Mark Hofstetter, University of Vienna mark.hofstetter@univie.ac.at
+Kai Storbeck, Kai@xs4all.nl
 
 # BUGS
 

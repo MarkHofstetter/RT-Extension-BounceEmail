@@ -48,9 +48,11 @@
          "web" : "https://github.com/MarkHofstetter/RT-Extension-BounceEmail"
       }
    },
-   "version" : "0.02",
+   "version" : "0.03",
    "x_contributors" : [
-      "Mark Hofstetter <mark@univie.ac.at>"
+      "Kai Storbeck <kai@xs4all.net>",
+      "Mark Hofstetter <mark@univie.ac.at>",
+      "MarkHofstetter <mark@hofstetter.at>"
    ]
 }
 

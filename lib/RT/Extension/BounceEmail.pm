@@ -6,7 +6,7 @@ our $VERSION = '0.02';
 
 =head1 NAME
 
-T-Extension-BounceEmail - Add the ability to Bounce Emails
+RT-Extension-BounceEmail - Add the ability to Bounce Emails
 
 =head1 DESCRIPTION
 
@@ -30,6 +30,9 @@ Works with RT 4.2
 
 May need root permissions
 
+=item C<make initdb>
+
+Only for first-time installation
 
 =item Edit your F</opt/rt4/etc/RT_SiteConfig.pm>
 
@@ -54,6 +57,7 @@ or add C<RT::Extension::BounceEmail> to your existing C<@Plugins> line.
 =head1 AUTHOR
 
 Mark Hofstetter, University of Vienna mark.hofstetter@univie.ac.at
+Kai Storbeck, Kai@xs4all.nl
 
 =head1 BUGS
 
