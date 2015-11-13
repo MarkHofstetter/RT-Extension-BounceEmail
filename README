@@ -1,5 +1,5 @@
 NAME
-    RT-Extension-BounceEmail - Add the ability to Bounce Emails  
+    RT-Extension-BounceEmail - Add the ability to Bounce Emails
 
 DESCRIPTION
     if one does not want to alter the content of an email with a forward
@@ -13,17 +13,6 @@ INSTALLATION
     make
     make install
         May need root permissions
-
-    make initdb
-        Only run this the first time you install this module.
-
-        If you run this twice, you may end up with duplicate data in your
-        database.
-
-        If you are upgrading this module, check for upgrading instructions
-        in case changes need to be made to your database.
-
-        to remoce changes to db execute etc/cleanup.sql in you database
 
     Edit your /opt/rt4/etc/RT_SiteConfig.pm
         If you are using RT 4.2 or greater, add this line:
@@ -45,8 +34,7 @@ AUTHOR
     Mark Hofstetter, University of Vienna mark.hofstetter@univie.ac.at
 
 BUGS
-
-    or via the web at
+    via the web at
 
         L<https://github.com/MarkHofstetter/RT-Extension-BounceEmail/issues>.
 
