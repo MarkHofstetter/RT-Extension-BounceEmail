@@ -32,11 +32,13 @@ INSTALLATION
 
 AUTHOR
     Mark Hofstetter, University of Vienna mark.hofstetter@univie.ac.at
+    Kai Storbeck, Kai@xs4all.nl
 
 BUGS
-    via the web at
+    or via the web at
 
         L<https://github.com/MarkHofstetter/RT-Extension-BounceEmail/issues>.
+
 
 LICENSE AND COPYRIGHT
     This software is Copyright (c) 2015 by Mark Hofstetter
