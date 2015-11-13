@@ -8,9 +8,8 @@ $ShowActions => 1
 $Attachments
 </%ARGS>
 <%INIT>
-if ( $Transaction->Type !~ /EmailRecord$/ && $ForwardPath && %$Attachments && $ShowActions ) {
-## XXX check rights
-## && $Object->CurrentUserHasRight( $has_right{'Forward'} )) {
+my $bounce = RT::ACE->CanonicalizeRightName('BounceMessage');
+if ( $Transaction->Type !~ /EmailRecord$/ && $ForwardPath && %$Attachments && $ShowActions && $bounce && $Object->CurrentUserHasRight( $bounce )) {
  push @$Actions,  {
              class  => "forward-link",
              title  => loc('Bounce'),
