@@ -71,4 +71,13 @@ This is free software, licensed under:
 
 =cut
 
+require RT::Transaction;
+$RT::Transaction::_BriefDescriptions{"Bounce Transaction"} = sub {
+        my $self = shift;
+
+        return ( "Bounced [_2]Transaction #[_1][_3]",
+            $self->Field,
+            [\'<a href="#txn-', $self->Field, \'">'], \'</a>'); #loc()
+};
+
 1;
