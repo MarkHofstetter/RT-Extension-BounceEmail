@@ -65,11 +65,11 @@ sub Prepare {
 
     my $txn = $self->TransactionObj;
 
-    if ( $txn->Type eq 'Bounce Transaction' ) {
-        my $forwarded_txn = RT::Transaction->new( $self->CurrentUser );
-        $forwarded_txn->Load( $txn->Field );
-        $self->{ForwardedTransactionObj} = $forwarded_txn;
-    }
+    my $forwarded_txn = RT::Transaction->new( $self->CurrentUser );
+    $forwarded_txn->Load( $txn->Field );
+    return 0 unless $forwarded_txn->id;
+
+    $self->{ForwardedTransactionObj} = $forwarded_txn;
 
     my ( $result, $message ) = $self->TemplateObj->Parse(
         Argument           => $self->Argument,
@@ -85,26 +85,7 @@ sub Prepare {
     my $mime = $self->TemplateObj->MIMEObj;
     $mime->make_multipart unless $mime->is_multipart;
 
-    my $entity;
-    if ( $txn->Type eq 'Bounce Transaction' ) {
-        $entity = $self->ForwardedTransactionObj->ContentAsMIME;
-    }
-    else {
-        my $txns = $self->TicketObj->Transactions;
-        $txns->Limit(
-            FIELD    => 'Type',
-            OPERATOR => 'IN',
-            VALUE    => [qw(Create Correspond)],
-        );
-
-        $entity = MIME::Entity->build(
-            Type        => 'multipart/mixed',
-            Description => 'forwarded ticket',
-        );
-        $entity->add_part($_) foreach
-          map $_->ContentAsMIME,
-          @{ $txns->ItemsArrayRef };
-    }
+    my $entity = $self->ForwardedTransactionObj->ContentAsMIME;
 
     $mime->add_part($entity);
 
