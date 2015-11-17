@@ -71,34 +71,20 @@ sub Prepare {
 
     $self->{ForwardedTransactionObj} = $forwarded_txn;
 
-    my ( $result, $message ) = $self->TemplateObj->Parse(
-        Argument           => $self->Argument,
-        Ticket             => $self->TicketObj,
-        Transaction        => $self->ForwardedTransactionObj,
-        ForwardTransaction => $self->TransactionObj,
-    );
-
-    if ( !$result ) {
-        return (undef);
-    }
-
-    my $mime = $self->TemplateObj->MIMEObj;
-    $mime->make_multipart unless $mime->is_multipart;
-
     my $entity = $self->ForwardedTransactionObj->ContentAsMIME;
-
-    $mime->add_part($entity);
 
     my $txn_attachment = $self->TransactionObj->Attachments->First;
     for my $header (qw/From To Cc Bcc/) {
         if ( $txn_attachment->GetHeader( $header ) ) {
-            $mime->head->replace( $header => Encode::encode( "UTF-8", $txn_attachment->GetHeader($header) ) );
+            $entity->head->replace( $header => Encode::encode( "UTF-8", $txn_attachment->GetHeader($header) ) );
         }
     }
 
     if ( RT->Config->Get('ForwardFromUser') ) {
-        $mime->head->replace( 'X-RT-Sign' => 0 );
+        $entity->head->replace( 'X-RT-Sign' => 0 );
     }
+
+    $self->TemplateObj->{MIMEObj} = $entity;
 
     $self->SUPER::Prepare();
 }
