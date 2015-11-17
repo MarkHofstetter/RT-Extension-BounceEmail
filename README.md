@@ -43,14 +43,14 @@ Works with RT 4.2
 
 # AUTHOR
 
-Mark Hofstetter, University of Vienna mark.hofstetter@univie.ac.at
-Kai Storbeck, Kai@xs4all.nl
+Mark Hofstetter University of Vienna <mark.hofstetter@univie.ac.at>
+Kai Storbeck <Kai@xs4all.nl>
 
 # BUGS
 
 or via the web at
 
-    L<https://github.com/MarkHofstetter/RT-Extension-BounceEmail/issues>.
+    <https://github.com/MarkHofstetter/RT-Extension-BounceEmail/issues>.
 
 # LICENSE AND COPYRIGHT
 

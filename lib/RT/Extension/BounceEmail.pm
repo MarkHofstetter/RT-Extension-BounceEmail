@@ -56,14 +56,14 @@ or add C<RT::Extension::BounceEmail> to your existing C<@Plugins> line.
 
 =head1 AUTHOR
 
-Mark Hofstetter, University of Vienna mark.hofstetter@univie.ac.at
-Kai Storbeck, Kai@xs4all.nl
+Mark Hofstetter University of Vienna <mark.hofstetter@univie.ac.at>
+Kai Storbeck <Kai@xs4all.nl>
 
 =head1 BUGS
 
 or via the web at
 
-    L<https://github.com/MarkHofstetter/RT-Extension-BounceEmail/issues>.
+    <https://github.com/MarkHofstetter/RT-Extension-BounceEmail/issues>.
 
 =head1 LICENSE AND COPYRIGHT
 

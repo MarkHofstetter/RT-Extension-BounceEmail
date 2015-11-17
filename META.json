@@ -1,7 +1,7 @@
 {
    "abstract" : "An Extension to Best Practical Request Tracker (https://www.bestpractical.com/rt/) to allow email bounces",
    "author" : [
-      "Mark Hofstetter, University of Vienna mark.hofstetter@univie.ac.at"
+      "Mark Hofstetter University of Vienna <mark.hofstetter@univie.ac.at>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Dist::Zilla version 5.025, Dist::Milla version v1.0.8, CPAN::Meta::Converter version 2.143240",
