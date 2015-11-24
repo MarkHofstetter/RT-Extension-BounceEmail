@@ -71,36 +71,61 @@ sub Prepare {
 
     $self->{ForwardedTransactionObj} = $forwarded_txn;
 
-    my ( $result, $message ) = $self->TemplateObj->Parse(
-        Argument           => $self->Argument,
-        Ticket             => $self->TicketObj,
-        Transaction        => $self->ForwardedTransactionObj,
-        ForwardTransaction => $self->TransactionObj,
-    );
-
-    if ( !$result ) {
-        return (undef);
-    }
-
-    my $mime = $self->TemplateObj->MIMEObj;
-    $mime->make_multipart unless $mime->is_multipart;
-
-    my $entity = $self->ForwardedTransactionObj->ContentAsMIME;
-
-    $mime->add_part($entity);
+    my $entity = ContentSansFromAsMIME($self->ForwardedTransactionObj->Attachments->First, { Children => 1 });
 
     my $txn_attachment = $self->TransactionObj->Attachments->First;
     for my $header (qw/From To Cc Bcc/) {
         if ( $txn_attachment->GetHeader( $header ) ) {
-            $mime->head->replace( $header => Encode::encode( "UTF-8", $txn_attachment->GetHeader($header) ) );
+            $entity->head->replace( $header => Encode::encode( "UTF-8", $txn_attachment->GetHeader($header) ) );
         }
     }
 
     if ( RT->Config->Get('ForwardFromUser') ) {
-        $mime->head->replace( 'X-RT-Sign' => 0 );
+        $entity->head->replace( 'X-RT-Sign' => 0 );
     }
 
+    $self->TemplateObj->{MIMEObj} = $entity;
+
     $self->SUPER::Prepare();
+}
+
+# This is a copy of RT::Attachment::ContentAsMIME, which
+# copies all headers except the "From " and X-RT-* headers.
+sub ContentSansFromAsMIME {
+    my ($self) = shift;
+    my %opts = (
+        Children => 0,
+        @_
+    );
+
+    my $entity = MIME::Entity->new();
+    foreach my $header ($self->SplitHeaders) {
+        next if $header =~ m/^From / || $header =~ m/^X-RT-/;
+        my ($h_key, $h_val) = split /:/, $header, 2;
+        $entity->head->add(
+            $h_key, $self->_EncodeHeaderToMIME($h_key, $h_val)
+        );
+    }
+
+    if ($entity->is_multipart) {
+        if ($opts{'Children'} and not $self->IsMessageContentType) {
+            my $children = $self->Children;
+            while (my $child = $children->Next) {
+                $entity->add_part( $child->ContentAsMIME(%opts) );
+            }
+        }
+    } else {
+        # since we want to return original content, let's use original encoding
+        $entity->head->mime_attr(
+            "Content-Type.charset" => $self->OriginalEncoding )
+          if $self->OriginalEncoding;
+
+        $entity->bodyhandle(
+            MIME::Body::Scalar->new( $self->OriginalContent )
+        );
+    }
+
+    return $entity;
 }
 
 sub SetSubjectToken {
