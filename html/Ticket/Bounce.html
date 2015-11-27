@@ -115,8 +115,6 @@ my ( $status, $msg ) = Bounce($TicketObj, Transaction => $txn, %ARGS );
 
 my $Title = loc('Bounce transaction #[_1]', $txn->id);
 
-my $from = RT::Interface::Email::GetForwardFrom( Transaction => $txn );
-
 my $subject = $txn->Subject;
 
 my $Content = $txn->Content;
@@ -125,6 +123,8 @@ my $attachments = RT::Interface::Email::GetForwardAttachments(
     Ticket => $TicketObj,
     Transaction => $txn,
 );
+
+my $from = $attachments->First->GetHeader('From');
 
 # this should possibly somwhere else but wtf
 sub Bounce {
