@@ -84,4 +84,8 @@ $RT::Transaction::_BriefDescriptions{"Bounce Transaction"} = sub {
             [\'<a href="#txn-', $self->Field, \'">'], \'</a>'); #loc()
 };
 
+# Insert the BounceMessage right
+require RT::Queue;
+RT::Queue->AddRight( Staff => BounceMessage    => 'Bounce messages to third person(s)' );
+
 1;

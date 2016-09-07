@@ -92,7 +92,7 @@ my $TicketObj = LoadTicket($id);
 $id = $ARGS{'id'} = $TicketObj->id;
 
 Abort( loc("Permission Denied") )
-    unless $TicketObj->CurrentUserHasRight('ForwardMessage');
+    unless $TicketObj->CurrentUserHasRight('BounceMessage');
 
 my $txn = RT::Transaction->new( $session{'CurrentUser'} );
 $txn->Load( $QuoteTransaction );
@@ -142,7 +142,7 @@ sub Bounce {
         @_
     );
 
-    unless ( $self->CurrentUserHasRight('ForwardMessage') ) {
+    unless ( $self->CurrentUserHasRight('BounceMessage') ) {
         return ( 0, $self->loc("Permission Denied") );
     }
 
