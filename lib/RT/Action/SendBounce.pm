@@ -71,14 +71,27 @@ sub Prepare {
 
     $self->{ForwardedTransactionObj} = $forwarded_txn;
 
-    my $entity = ContentSansFromAsMIME($self->ForwardedTransactionObj->Attachments->First, { Children => 1 });
+    my $entity = ContentSansFromAsMIME($self->ForwardedTransactionObj->Attachments->First, Children => 1);
 
     my $txn_attachment = $self->TransactionObj->Attachments->First;
-    for my $header (qw/From To Cc Bcc/) {
-        if ( $txn_attachment->GetHeader( $header ) ) {
-            $entity->head->replace( $header => Encode::encode( "UTF-8", $txn_attachment->GetHeader($header) ) );
+    for my $header (qw/To Cc Bcc/) {
+        if ( my $original = $entity->head->get( $header ) ) {
+            $entity->head->add( "X-Original-$header" => Encode::encode( "UTF-8", $original ) );
+        }
+
+        if ( my $v = $txn_attachment->GetHeader( $header ) ) {
+            $entity->head->replace( $header => Encode::encode( "UTF-8", $v ) );
+        } else {
+            $entity->head->delete( $header );
         }
     }
+
+    # RFC5322, section 3.3.6
+    require RT::Date;
+    my $date = RT::Date->new( $txn->CurrentUser );
+    $date->SetToNow;
+    $entity->head->add('Resent-Date', $date->RFC2822(Timezone => 'server') );
+    $entity->head->add('Resent-From' => RT->Config->Get('CorrespondAddress'));
 
     if ( RT->Config->Get('ForwardFromUser') ) {
         $entity->head->replace( 'X-RT-Sign' => 0 );
