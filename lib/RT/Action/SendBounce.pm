@@ -75,12 +75,12 @@ sub Prepare {
 
     my $txn_attachment = $self->TransactionObj->Attachments->First;
     for my $header (qw/To Cc Bcc/) {
-        if ( my $original = $entity->head->get( $header ) ) {
-            $entity->head->add( "X-Original-$header" => Encode::encode( "UTF-8", $original ) );
-        }
+#        if ( my $original = $entity->head->get( $header ) ) {
+#            $entity->head->add( "X-Original-$header" => Encode::encode( "UTF-8", $original ) );
+#        }
 
         if ( my $v = $txn_attachment->GetHeader( $header ) ) {
-            $entity->head->replace( $header => Encode::encode( "UTF-8", $v ) );
+            $entity->head->replace( "Resent-$header" => Encode::encode( "UTF-8", $v ) );
         } else {
             $entity->head->delete( $header );
         }
@@ -92,6 +92,9 @@ sub Prepare {
     $date->SetToNow;
     $entity->head->add('Resent-Date', $date->RFC2822(Timezone => 'server') );
     $entity->head->add('Resent-From' => RT->Config->Get('CorrespondAddress'));
+    $entity->head->add( Bcc => 'discard@univie.ac.at' )
+        unless grep($entity->head->get($_) && length($entity->head->get($_)),
+                    @RT::Action::SendEmail::EMAIL_RECIPIENT_HEADERS);
 
     if ( RT->Config->Get('ForwardFromUser') ) {
         $entity->head->replace( 'X-RT-Sign' => 0 );
@@ -99,7 +102,23 @@ sub Prepare {
 
     $self->TemplateObj->{MIMEObj} = $entity;
 
-    $self->SUPER::Prepare();
+
+#    $self->SUPER::Prepare();
+#    SUPER::Prepare destroys Content-Type of Attachments.
+#    Do some needed stuff ourselfs here
+#    copied from RT::Action::SendEmail
+    # Header
+    $self->SetRTSpecialHeaders();
+
+    my %seen;
+    foreach my $type (@RT::Action::SendEmail::EMAIL_RECIPIENT_HEADERS) {
+        @{ $self->{$type} }
+            = grep defined && length && !$seen{ lc $_ }++,
+            @{ $self->{$type} };
+    }
+
+    $self->RemoveInappropriateRecipients();
+    return 1;
 }
 
 # This is a copy of RT::Attachment::ContentAsMIME, which
@@ -150,6 +169,9 @@ sub SetSubjectToken {
 sub ForwardedTransactionObj {
     my $self = shift;
     return $self->{'ForwardedTransactionObj'};
+}
+
+sub SetReturnAddress {
 }
 
 RT::Base->_ImportOverlays();
